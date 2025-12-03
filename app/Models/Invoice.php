@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Invoice extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'total',
+        'vat',
+        'payable',
+        'cus_details',
+        'ship_details',
+        'tran_id',
+        'val_id',
+        'delivery_status',
+        'payment_status',
+    ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function invoiceProducts(): HasMany
+    {
+        return $this->hasMany(InvoiceProduct::class, 'invoice_id');
+    }
+}
