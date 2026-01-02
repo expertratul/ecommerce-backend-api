@@ -12,28 +12,19 @@ class ProductReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    // public function ProductReviewList(Request $request)
-    // {
-    //     $productReviews = ProductReview::where('product_id', $request->product_id)
-    //     ->with(['profile' => function($query){
+    public function ProductReviewList(Request $request)
+    {
+        $productReviews = ProductReview::where('product_id', $request->product_id)
+        ->with(['profile' => function($query){
 
-    //         $query->select('id', 'cus_name');
-    //     }])->get();
+            $query->select('id', 'cus_name');
+        }])->get();
 
-    //     $data = ProductReviewResource::collection($productReviews);
-    //     return ResponseHelper::success($data);
+        $data = ProductReviewResource::collection($productReviews);
+        return ResponseHelper::success($data);
         
-    // }
-
-    public function ProductReviewList($product_id)
-{
-    $reviews = ProductReview::where('product_id', $product_id)
-        ->with('profile:id,cus_name')->get();
-
-        return ResponseHelper::success(
-            ProductReviewResource::collection($reviews)
-        );
     }
+
 
     /**
      * Show the form for creating a new resource.
