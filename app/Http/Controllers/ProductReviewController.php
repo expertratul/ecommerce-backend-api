@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
+use App\Http\Resources\ProductReviewResource;
+use App\Models\ProductReview;
 use Illuminate\Http\Request;
 
 class ProductReviewController extends Controller
@@ -9,9 +12,27 @@ class ProductReviewController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    // public function ProductReviewList(Request $request)
+    // {
+    //     $productReviews = ProductReview::where('product_id', $request->product_id)
+    //     ->with(['profile' => function($query){
+
+    //         $query->select('id', 'cus_name');
+    //     }])->get();
+
+    //     $data = ProductReviewResource::collection($productReviews);
+    //     return ResponseHelper::success($data);
+        
+    // }
+
+    public function ProductReviewList($product_id)
+{
+    $reviews = ProductReview::where('product_id', $product_id)
+        ->with('profile:id,cus_name')->get();
+
+        return ResponseHelper::success(
+            ProductReviewResource::collection($reviews)
+        );
     }
 
     /**

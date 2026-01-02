@@ -3,16 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ProductSlider;
+use App\Helpers\ResponseHelper;
+use App\Http\Resources\ProductSliderResource;
 
 class ProductSliderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function productListSlider()
     {
-        //
+        $productListSlider = ProductSlider::all();
+        
+        $data = ProductSliderResource::collection($productListSlider);
+        return ResponseHelper::success($data);
     }
+
 
     /**
      * Show the form for creating a new resource.
