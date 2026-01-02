@@ -2,17 +2,57 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Helpers\ResponseHelper;
+use App\Http\Resources\ProductResource;
+use App\Models\ProductSlider;
 
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
+     * Get product list by category ID.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function productListByCategory(Request $request)
     {
-        //
+        $productsCategoryList = Product::where('category_id', $request->id)->with('brand', 'category')->get();
+        
+        $data = ProductResource::collection($productsCategoryList);
+        return ResponseHelper::success($data);
+        
     }
+
+    /**
+     * Get product list by brand ID.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function productListByBrand(Request $request)
+    {
+        $productsBrandList = Product::where('brand_id', $request->id)->with('brand', 'category')->get();
+        
+        $data = ProductResource::collection($productsBrandList);
+        return ResponseHelper::success($data);
+    }
+    
+    /**
+     * Get product list by remark.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+    */
+    public function productListByRemark(Request $request)
+    {
+        $productsRemarkList = Product::where('remark', $request->remark)->with('brand', 'category')->get();
+        
+        $data = ProductResource::collection($productsRemarkList);
+        return ResponseHelper::success($data);
+    }
+
 
     /**
      * Show the form for creating a new resource.

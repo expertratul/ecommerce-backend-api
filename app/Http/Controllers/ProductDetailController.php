@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseHelper;
+use App\Http\Resources\ProductDetailResource;
+use App\Models\ProductDetail;
 use Illuminate\Http\Request;
 
 class ProductDetailController extends Controller
@@ -9,9 +12,12 @@ class ProductDetailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function productDetailsById(Request $request)
     {
-        //
+        $productDetail = ProductDetail::where('product_id', $request->id)->with('product', 'product.brand', 'product.category')->get();
+
+        $data = ProductDetailResource::collection($productDetail);
+        return ResponseHelper::success($data);
     }
 
     /**
