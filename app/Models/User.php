@@ -14,10 +14,7 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'email',
-        'otp'
-    ];
+    protected $fillable = ['email', 'otp'];
 
     public function customerProfile(): HasOne
     {
