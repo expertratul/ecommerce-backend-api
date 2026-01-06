@@ -2,16 +2,24 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductWishController;
 use App\Http\Controllers\ProductDetailController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\ProductSliderController;
+use App\Http\Middleware\tokenVerificationMiddleware;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+//User Authentication Routes
+Route::get('/userLogin/{userEmail}', [UserController::class, 'userLogin']);
+Route::get('/userVerify/{userEmail}/{otp}', [UserController::class, 'verifyLogin']);
+Route::get('/logout',[UserController::class,'userLogout']);
 
 // Brand Routes
 Route::get('/brandList', [BrandController::class, 'brandList'])->name('brand.list');
@@ -33,8 +41,17 @@ Route::get('/productListByBrand/{id}', [ProductController::class, 'productListBy
 Route::get('/productListByRemark/{remark}', [ProductController::class, 'productListByRemark'])->name('products.listByRemark');
 Route::get('/productListSlider', [ProductSliderController::class, 'productListSlider'])->name('products.listSlider');
 Route::get('/productDetailsById/{id}', [ProductDetailController::class, 'productDetailsById'])->name('products.detailsById');   
-
 Route::get('/productReviewList/{product_id}', [ProductReviewController::class, 'ProductReviewList'])->name('products.reviewList');
+
+//Product Wishlist Routes
+Route::get('/productWishList', [ProductWishController::class, 'productWishList'])->middleware([tokenVerificationMiddleware::class]);
+Route::get('/createWishList/{product_id}', [ProductWishController::class, 'productWishCreate'])->middleware([tokenVerificationMiddleware::class]);
+Route::get('/deleteWishList/{product_id}', [ProductWishController::class, 'productWishDelete'])->middleware([tokenVerificationMiddleware::class]);
+
+
+
+
+
 
 
 
