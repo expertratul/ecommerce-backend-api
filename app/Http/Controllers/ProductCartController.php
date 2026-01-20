@@ -13,9 +13,16 @@ class ProductCartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function listCartProducts()
+    public function listCartProducts(Request $request)
     {
-        //
+        try{
+            $user_id = $request->header('id');
+            $cartList = ProductCart::where('user_id', $user_id)->with('product')->get();
+            return ResponseHelper::success($cartList, 'Product added to cart',200);
+        
+        }catch(\Exception $e){
+            return ResponseHelper::error($e->getMessage(), 500);
+        }
     }
 
     /**
@@ -63,42 +70,21 @@ class ProductCartController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function deleteCartProduct(string $id)
+    public function deleteCartProduct(Request $request, $product_id)
     {
-        //
+        try{
+            $user_id = $request->header('id');
+            $cartDelete = ProductCart::where('user_id', $user_id)->where('product_id', $product_id)->delete();
+
+            if(!$cartDelete){
+                return ResponseHelper::error('Invalid product ID not found in cart', 400);
+            }
+            return ResponseHelper::success($cartDelete, 'cart remove successfully', 200);
+        
+        }catch(\Exception $e){
+            return ResponseHelper::error($e->getMessage(), 500);
+        }
     }
 }
